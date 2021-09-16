@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($user_type == "admin") {
               header("Location: admin_homepage.php");
             } else if ($user_type == "employee") {
-              header("Location: employee_homepage.php");
+              header("Location: ./employee/home.php");
             }
 					} else {
 						$errmsg3 = "Wrong Password!";

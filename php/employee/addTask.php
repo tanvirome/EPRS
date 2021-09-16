@@ -1,8 +1,8 @@
 <?php
   
-  include "../includes/db_connect.inc.php";
-  include "../includes/db_queries.inc.php";
-  include "../includes/admin_menu.inc.php";
+  include "../../includes/db_connect.inc.php";
+  include "../../includes/db_queries.inc.php";
+  include "../../includes/employee_menu.inc.php";
 
   session_start();
 
@@ -16,8 +16,9 @@
     $point = mysqli_real_escape_string($conn, $_POST['point']);
     $empId = mysqli_real_escape_string($conn, $_POST['empId']);
     $deadline = mysqli_real_escape_string($conn, $_POST['deadline']);
+    $loggedIn_user_id = $_SESSION["user_id"];
 
-    $sqlQuery = createDailyWorkQuery($title, $description, $deadline, $point, $empId);
+    $sqlQuery = createTaskByOthersQuery($title, $description, $deadline, $point, $empId, $loggedIn_user_id);
     
     if (mysqli_query($conn, $sqlQuery)) {
       header("location: tasks.php");
@@ -37,7 +38,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
 </head>
 <body>
-  <?php echo adminMenuItems(); ?>
+  <?php echo employeeMenuItems(); ?>
 
   <div>
     <h3>Fill up form carefully!</h3>

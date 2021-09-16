@@ -77,4 +77,30 @@
     $time = date("Y-m-d H:i:s");
     return "INSERT INTO task_by_others (title, given_to,  description, time, deadline, points, employeesid) VALUES ('$title', $empId, '$description', '$time', '$deadline', $point, $loggedIn_user_id);";
   }
+
+  function getAllTasksByOthersOfUserQuery($loggedIn_user_id) {
+    return "SELECT t.id, t.title, t.description, t.points, t.time, t.deadline, t.submission_time, e.name, t.employeesid FROM task_by_others as t JOIN employees as e on e.id = t.employeesid where t.given_to = $loggedIn_user_id;";
+  }
+
+  function getAllTasksByAdminOfUserQuery($loggedIn_user_id) {
+    return "SELECT id, title, description, project_point,time, deadline, submission_time FROM daily_work WHERE employeesid = $loggedIn_user_id;";
+  }
+
+  function getSubmitTaskByAdminQuery($taskId) {
+    $now = date("Y-m-d H:i:s");
+    return "UPDATE daily_work SET submission_time = '$now' WHERE id = '$taskId';";
+  }
+
+  function getSubmitTaskByOthersQuery($taskId) {
+    $now = date("Y-m-d H:i:s");
+    return "UPDATE task_by_others SET submission_time = '$now' WHERE id = '$taskId';";
+  }
+
+  function getEmployeePointsQuery($empId) {
+    return "SELECT points FROM employees WHERE id = '$empId';";
+  }
+
+  function getUpdateEmployeePointsQuery($points, $empId) {
+    return "UPDATE employees SET points = '$points' WHERE id = '$empId';";
+  }
 ?>
