@@ -9,6 +9,32 @@
   if (!isset($_SESSION["user_email"])) {
     header("Location: index.php");
   }
+
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $title = mysqli_real_escape_string($conn, $_POST['title']);
+    $description = mysqli_real_escape_string($conn, $_POST['description']);
+    $point = mysqli_real_escape_string($conn, $_POST['point']);
+    $empId = mysqli_real_escape_string($conn, $_POST['empId']);
+    $deadline = mysqli_real_escape_string($conn, $_POST['deadline']);
+    $loggedIn_user_id = $_SESSION["user_id"];
+    $user_type = $_SESSION['user_type'];
+
+    if ($user_type == "admin") {
+      $sqlQuery = createDailyWorkQuery($title, $description, $deadline, $point, $empId);
+    } else {
+      $sqlQuery = createTaskByOthersQuery($title, $description, $deadline, $point, $empId, $loggedIn_user_id);
+    }
+    
+    if (mysqli_query($conn, $sqlQuery)) {
+      if ($user_type == "admin") {
+        header("location: tasks.php");
+      } else {
+        header("location: index.php");
+      }
+    } else {
+      echo "Error: " . $sqlQuery . "<br>" . mysqli_error($conn);
+    }
+  }
 ?>
 
 <!DOCTYPE html>
@@ -22,5 +48,18 @@
 </head>
 <body>
   <?php echo adminMenuItems(); ?>
+
+  <div>
+    <h3>Fill up form carefully!</h3>
+
+    <form method="post">
+      <input type="text" name="title" id="title" placeholder="Title..."> <br>
+      <textarea id="description" name="description" rows="5" cols="33" placeholder="Description..."></textarea> <br>
+      <input type="number" name="point" id="point" placeholder="Project Point"> <br>
+      <input type="number" name="empId" id="empId" placeholder="Employee ID"> <br>
+      <input type="datetime-local" name="deadline" id="deadline" placeholder="Deadline"> <br>
+      <button type="submit" name="addTask" id="addTask">Add</button> <br>
+    </form>
+  </div>
 </body>
 </html>

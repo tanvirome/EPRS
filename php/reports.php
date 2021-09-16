@@ -18,7 +18,7 @@
       if (!empty($_POST['feedback'])) {
         $feedback = mysqli_real_escape_string($conn, $_POST['feedback']);
         $reportId = mysqli_real_escape_string($conn, $_POST['reportId']);
-        $sqlQuery = postAdminFeedbackOnReport($feedback, $reportId);
+        $sqlQuery = postAdminFeedbackOnReportQuery($feedback, $reportId);
         mysqli_query($conn, $sqlQuery);
 
         $sqlQuery = getAllReportsQuery();

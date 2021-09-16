@@ -64,7 +64,17 @@
     return "SELECT r.time, r.id, r.title, r.description, r.feedback_from_reported, r.admin_feedback, e.name, e1.name as 'name2' FROM employees as e JOIN report as r on e.id = r.employeesid JOIN employees as e1 on e1.id = r.reported_to;";
   }
 
-  function postAdminFeedbackOnReport($feedback, $reportId) {
+  function postAdminFeedbackOnReportQuery($feedback, $reportId) {
     return "UPDATE report SET admin_feedback='$feedback' WHERE id = '$reportId';";
+  }
+
+  function createDailyWorkQuery($title, $description, $deadline, $point, $empId) {
+    $time = date("Y-m-d H:i:s");
+    return "INSERT INTO daily_work (title, description, time, deadline, project_point, employeesid) VALUES ('$title', '$description', '$time', '$deadline', $point, $empId);";
+  }
+
+  function createTaskByOthersQuery($title, $description, $deadline, $point, $empId, $loggedIn_user_id) {
+    $time = date("Y-m-d H:i:s");
+    return "INSERT INTO task_by_others (title, given_to,  description, time, deadline, points, employeesid) VALUES ('$title', $empId, '$description', '$time', '$deadline', $point, $loggedIn_user_id);";
   }
 ?>

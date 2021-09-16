@@ -81,15 +81,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <div class="login_form">
     <form action="index.php" method="POST" class="login_info">
       <div>
-        <!-- <label for="user_email">Email Address</label> <br /> -->
-        <!-- <input class="user_info" type="text" name="username" id="username" placeholder="Username" value="<?php echo $username ?>" required /> -->
         <input type="email" name="email" id="email" placeholder="email">
         <br />
         <span style="color:red;"><?php echo $errmsg1; ?></span>
       </div>
       <div>
-        <!-- <label for="user_password">Password</label> <br /> -->
-        <!-- <input type="password" name="user_password" id="user_password" placeholder="Password" required class="user_info" /> -->
         <input type="password" name="user_password" id="user_password" placeholder="Password">
         <br />
         <span style="color:red;"><?php echo $errmsg2; ?></span>
