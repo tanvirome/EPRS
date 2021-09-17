@@ -10,7 +10,7 @@ if (isset($_SESSION["user_email"])) {
 	if ($type == "admin") {
 		header("Location: admin_homepage.php");
 	} else if ($type == "employee") {
-		header("Location: employee_homepage.php");
+		header("Location: ./employee/home.php");
 	}
 }
 

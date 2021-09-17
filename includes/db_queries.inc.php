@@ -111,4 +111,9 @@
   function postReporterFeedbackOnReportQuery($feedback, $reportId) {
     return "UPDATE report SET feedback_from_reported='$feedback' WHERE id = '$reportId';";
   }
+
+  function getCreatePostQuery($title, $category, $content, $loggedIn_user_id) {
+    $now = date("Y-m-d H:i:s");
+    return "INSERT INTO post(title, category, content, time, employeesid) VALUES('$title', '$category', '$content', '$now', $loggedIn_user_id);";
+  }
 ?>

@@ -7,7 +7,7 @@ function employeeMenuItems()
   <h3>Employee Homepage</h3>
   
   <div>
-    <a href="blog.php">Blog</a>
+    <a href="../blog/">Blog</a>
     <br>
     <a href="complains.php">Complains</a>
     <br>
