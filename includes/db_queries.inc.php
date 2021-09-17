@@ -116,4 +116,21 @@
     $now = date("Y-m-d H:i:s");
     return "INSERT INTO post(title, category, content, time, employeesid) VALUES('$title', '$category', '$content', '$now', $loggedIn_user_id);";
   }
+
+  function getAllPostsQuery() {
+    return "SELECT * FROM post;";
+  }
+
+  function getPostByIdQuery($postId) {
+    return "SELECT p.title as postTitle, p.category as postCategory,
+               p.content as postContent, p.time as postTime,
+               c.comment as commentContent, c.time as commentTime,
+               e.name as employeesName
+               FROM post as p
+               LEFT JOIN comment as c
+               ON c.postid = p.id
+               LEFT JOIN employees as e
+               ON e.id = c.employeesid
+               WHERE p.id = $postId";
+  }
 ?>
