@@ -103,4 +103,12 @@
   function getUpdateEmployeePointsQuery($points, $empId) {
     return "UPDATE employees SET points = '$points' WHERE id = '$empId';";
   }
+
+  function getAllReportsOfEmployeeQuery($loggedIn_user_id) {
+    return "SELECT * FROM report WHERE reported_to = $loggedIn_user_id;";
+  }
+
+  function postReporterFeedbackOnReportQuery($feedback, $reportId) {
+    return "UPDATE report SET feedback_from_reported='$feedback' WHERE id = '$reportId';";
+  }
 ?>
