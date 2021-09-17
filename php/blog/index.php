@@ -25,11 +25,11 @@
     <br>
     <a href="posts.php">All posts</a>
     <br>
-    <a href="searchPost.php">Search for a post</a>
-    <br>
     <a href="complain.php">Complain</a>
     <br>
-    <a href="user.php">User</a>
+    <a href="myPosts.php">My Posts</a>
+    <br>
+    <a href="myComplains.php">My Submitted Complains</a>
     <br>
     <a href="../index.php">Home</a>
   </div>

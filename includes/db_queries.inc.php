@@ -133,4 +133,33 @@
                ON e.id = c.employeesid
                WHERE p.id = $postId";
   }
+
+  function getPostBySearchQuery($searchTerm) {
+    return 'SELECT * FROM post WHERE title LIKE "%'.$searchTerm.'%";';
+  }
+
+  function getCreateComplainQuery($empId, $title, $description, $loggedIn_user_id) {
+    $now = date("Y-m-d H:i:s");
+    return "INSERT INTO report (reported_to, time, title, description, employeesid) VALUES($empId, '$now', '$title', '$description', $loggedIn_user_id)";
+  }
+
+  function getMyPostsQuery($loggedIn_user_id) {
+    return "SELECT * FROM post WHERE employeesid = $loggedIn_user_id";
+  }
+
+  function getDeleteCommentsOfPostQuery($postId) {
+    return "DELETE FROM comment WHERE postid = $postId";
+  }
+
+  function getDeletePostQuery($postId) {
+    return "DELETE FROM post WHERE id = $postId";
+  }
+
+  function getMyComplainsQuery($loggedIn_user_id) {
+    return "SELECT * FROM report WHERE employeesid = $loggedIn_user_id";
+  }
+
+  function getDeleteComplainQuery($complainId) {
+    return "DELETE FROM report WHERE id = $complainId";
+  }
 ?>

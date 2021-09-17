@@ -8,6 +8,25 @@
   if (!isset($_SESSION["user_email"])) {
     header("Location: ../index.php");
   }
+
+  $loggedIn_user_id = $_SESSION["user_id"];
+
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (array_key_exists('submitComplain', $_POST)) {
+      $empId = mysqli_real_escape_string($conn, $_POST['empId']);
+      $title = mysqli_real_escape_string($conn, $_POST['title']);
+      $description = mysqli_real_escape_string($conn, $_POST['description']);
+      $sqlQuery = getCreateComplainQuery($empId, $title, $description, $loggedIn_user_id);
+      
+      if (mysqli_query($conn, $sqlQuery)) {
+        header("location: ../blog/");
+      } else {
+        echo "Error: " . $sqlQuery . "<br>" . mysqli_error($conn);
+      }
+
+      unset($_POST['submitComplain']);
+    }
+  }
 ?>
 
 <!DOCTYPE html>
@@ -22,6 +41,21 @@
 <body>
   <div class="m-5">
     <a href="../blog/">Home</a>
+
+    <div>
+      <form method="POST">
+        <input class="form-input" type="text" name="empId" id="empId" placeholder="ID">
+        <br>
+        <br>
+        <input class="form-input" type="text" name="title" id="title" placeholder="title">
+        <br>
+        <br>
+        <textarea class="textarea" name="description" id="description"  placeholder="Description..."></textarea>
+        <br>
+        <br>
+        <button type="submit" name="submitComplain" id="submitComplain">SUBMIT</button>
+      </form>
+    </div>
   </div>
 </body>
 </html>

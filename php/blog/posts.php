@@ -11,6 +11,20 @@
 
   $sqlQuery = getAllPostsQuery();
   $result = mysqli_query($conn, $sqlQuery);
+
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (array_key_exists('searchPost', $_POST)) {
+      if (!empty($_POST['searchTerm'])) {
+        $searchTerm = mysqli_real_escape_string($conn, $_POST['searchTerm']);
+        $sqlQuery = getPostBySearchQuery($searchTerm);
+        $result = mysqli_query($conn, $sqlQuery);
+      } else {
+        $sqlQuery = getAllPostsQuery();
+        $result = mysqli_query($conn, $sqlQuery);
+      }
+      unset($_POST['searchPost']);
+    }
+  }
 ?>
 
 <!DOCTYPE html>
@@ -29,6 +43,12 @@
 
   <div class="post-main-container">
     <h1>All Posts</h1>
+    <div class="mb-3">
+      <form method="post">
+        <input type="text" name="searchTerm" id="searchTerm" placeholder="Search...">
+        <input type="submit" name="searchPost" id="searchPost" value="Search 🔍">
+      </form>
+    </div>
     <?php while ($row = mysqli_fetch_assoc($result)) { ?>
       <div class="post-container">
         <h2><a href="showPost.php?postId=<?php echo $row['id']; ?>"><?php echo $row['title']; ?></a></h2>
