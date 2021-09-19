@@ -96,7 +96,7 @@
 
   function getSubmitTaskByAdminQuery($taskId, $loggedIn_user_id) {
     $now = date("Y-m-d H:i:s");
-    return "UPDATE daily_work SET submission_time = '$now', submittedBy = $loggedIn_user_id, isSubmitted = 1 WHERE id = '$taskId';";
+    return "UPDATE daily_work SET submission_time = '$now', isSubmitted = 1 WHERE id = '$taskId';";
   }
 
   function getSubmitTaskByOthersQuery($taskId, $loggedIn_user_id) {
