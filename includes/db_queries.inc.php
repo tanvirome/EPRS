@@ -49,7 +49,7 @@
   }
 
   function deleteAllTaskByOtherOfEmployeeGivenTo($empId) {
-    return "DELETE FROM task_by_others WHERE task_by_others.given_to = '$empId';";
+    return "DELETE FROM task_by_others WHERE task_by_others.submittedBy = '$empId';";
   }
 
   function deleteEmployeeQuery($empId) {
@@ -73,27 +73,35 @@
     return "INSERT INTO daily_work (title, description, time, deadline, project_point, employeesid) VALUES ('$title', '$description', '$time', '$deadline', $point, $empId);";
   }
 
-  function createTaskByOthersQuery($title, $description, $deadline, $point, $empId, $loggedIn_user_id) {
+  function createTaskByOthersQuery($title, $description, $deadline, $point, $loggedIn_user_id) {
     $time = date("Y-m-d H:i:s");
-    return "INSERT INTO task_by_others (title, given_to,  description, time, deadline, points, employeesid) VALUES ('$title', $empId, '$description', '$time', '$deadline', $point, $loggedIn_user_id);";
+    return "INSERT INTO task_by_others (title, description, time, deadline, points, employeesid) VALUES ('$title', '$description', '$time', '$deadline', $point, $loggedIn_user_id);";
+  }
+
+  function getAllCompletedTasksOfUserByOthersQuery($loggedIn_user_id) {
+    return "SELECT t.id, t.title, t.description, t.points, t.time, t.deadline, t.submission_time, e.name, t.employeesid FROM task_by_others as t JOIN employees as e on e.id = t.employeesid where t.submittedBy = $loggedIn_user_id and isSubmitted = 1;";
+  }
+
+  function getAllCompletedTasksOfUserByAdminQuery($loggedIn_user_id) {
+    return "SELECT id, title, description, project_point,time, deadline, submission_time FROM daily_work WHERE employeesid = $loggedIn_user_id and isSubmitted = 1;";
   }
 
   function getAllTasksByOthersOfUserQuery($loggedIn_user_id) {
-    return "SELECT t.id, t.title, t.description, t.points, t.time, t.deadline, t.submission_time, e.name, t.employeesid FROM task_by_others as t JOIN employees as e on e.id = t.employeesid where t.given_to = $loggedIn_user_id;";
+    return "SELECT t.id, t.title, t.description, t.points, t.time, t.deadline, t.submission_time, e.name, t.employeesid FROM task_by_others as t JOIN employees as e on e.id = t.employeesid where isSubmitted = 0;";
   }
 
   function getAllTasksByAdminOfUserQuery($loggedIn_user_id) {
-    return "SELECT id, title, description, project_point,time, deadline, submission_time FROM daily_work WHERE employeesid = $loggedIn_user_id;";
+    return "SELECT id, title, description, project_point,time, deadline, submission_time FROM daily_work WHERE employeesid = $loggedIn_user_id and isSubmitted = 0;";
   }
 
-  function getSubmitTaskByAdminQuery($taskId) {
+  function getSubmitTaskByAdminQuery($taskId, $loggedIn_user_id) {
     $now = date("Y-m-d H:i:s");
-    return "UPDATE daily_work SET submission_time = '$now' WHERE id = '$taskId';";
+    return "UPDATE daily_work SET submission_time = '$now', submittedBy = $loggedIn_user_id, isSubmitted = 1 WHERE id = '$taskId';";
   }
 
-  function getSubmitTaskByOthersQuery($taskId) {
+  function getSubmitTaskByOthersQuery($taskId, $loggedIn_user_id) {
     $now = date("Y-m-d H:i:s");
-    return "UPDATE task_by_others SET submission_time = '$now' WHERE id = '$taskId';";
+    return "UPDATE task_by_others SET submission_time = '$now', submittedBy = $loggedIn_user_id, isSubmitted = 1 WHERE id = '$taskId';";
   }
 
   function getEmployeePointsQuery($empId) {
@@ -114,7 +122,11 @@
 
   function getCreatePostQuery($title, $category, $content, $loggedIn_user_id) {
     $now = date("Y-m-d H:i:s");
-    return "INSERT INTO post(title, category, content, time, employeesid) VALUES('$title', '$category', '$content', '$now', $loggedIn_user_id);";
+    return "INSERT INTO post (title, category, content, time, employeesid) VALUES('$title', '$category', '$content', '$now', $loggedIn_user_id);";
+  }
+
+  function updatePostQuery($title, $category, $content, $post_id) {
+    return "UPDATE post SET title = '$title', category = '$category', content = '$content' WHERE id = $post_id;";
   }
 
   function getAllPostsQuery() {
@@ -122,16 +134,11 @@
   }
 
   function getPostByIdQuery($postId) {
-    return "SELECT p.title as postTitle, p.category as postCategory,
-               p.content as postContent, p.time as postTime,
-               c.comment as commentContent, c.time as commentTime,
-               e.name as employeesName
-               FROM post as p
-               LEFT JOIN comment as c
-               ON c.postid = p.id
-               LEFT JOIN employees as e
-               ON e.id = c.employeesid
-               WHERE p.id = $postId";
+    return "SELECT title as postTitle, category as postCategory, content as postContent, time as postTime FROM post WHERE id = $postId;";
+  }
+
+  function getCommentsByPostId($postId) {
+    return "SELECT c.comment as commentContent, c.time as commentTime, e.name as employeesName FROM comment as c LEFT JOIN employees as e ON e.id = c.employeesid WHERE postid = $postId;";
   }
 
   function getPostBySearchQuery($searchTerm) {
@@ -161,5 +168,18 @@
 
   function getDeleteComplainQuery($complainId) {
     return "DELETE FROM report WHERE id = $complainId";
+  }
+
+  function getComplainByIdQuery($complainId) {
+    return "SELECT * FROM report WHERE id = $complainId";
+  }
+  
+  function getUpdateComplainQuery($empId, $title, $description, $complainId) {
+    return "UPDATE report SET title = '$title', description = '$description', reported_to = $empId WHERE id = $complainId;";
+  }
+
+  function getCreateCommentQuery($comment, $loggedIn_user_id, $postId) {
+    $now = date("Y-m-d H:i:s");
+    return "INSERT INTO comment (comment, time, employeesid, postid) VALUES('$comment', '$now', $loggedIn_user_id, $postId);";
   }
 ?>

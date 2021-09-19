@@ -14,11 +14,10 @@
     $title = mysqli_real_escape_string($conn, $_POST['title']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
     $point = mysqli_real_escape_string($conn, $_POST['point']);
-    $empId = mysqli_real_escape_string($conn, $_POST['empId']);
     $deadline = mysqli_real_escape_string($conn, $_POST['deadline']);
     $loggedIn_user_id = $_SESSION["user_id"];
 
-    $sqlQuery = createTaskByOthersQuery($title, $description, $deadline, $point, $empId, $loggedIn_user_id);
+    $sqlQuery = createTaskByOthersQuery($title, $description, $deadline, $point, $loggedIn_user_id);
     
     if (mysqli_query($conn, $sqlQuery)) {
       header("location: tasks.php");
@@ -47,7 +46,6 @@
       <input type="text" name="title" id="title" placeholder="Title..."> <br>
       <textarea id="description" name="description" rows="5" cols="33" placeholder="Description..."></textarea> <br>
       <input type="number" name="point" id="point" placeholder="Project Point"> <br>
-      <input type="number" name="empId" id="empId" placeholder="Employee ID"> <br>
       <input type="datetime-local" name="deadline" id="deadline" placeholder="Deadline"> <br>
       <button type="submit" name="addTask" id="addTask">Add</button> <br>
     </form>

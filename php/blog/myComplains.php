@@ -39,6 +39,7 @@
         <th scope="col">Title</th>
         <th scope="col">Content</th>
         <th scope="col">FeedBack</th>
+        <th scope="col">Update</th>
         <th scope="col">Delete</th>
       </tr>
       </thead>
@@ -53,6 +54,9 @@
         } else {
           echo "Pending";
         } ?></td>
+        <td>
+          <a href="updateComplain.php?complainId=<?php echo $row['id']; ?>">Update</a>
+        </td>
         <td>
           <a href="deleteComplain.php?complainId=<?php echo $row['id']; ?>">Delete</a>
         </td>

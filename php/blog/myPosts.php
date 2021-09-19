@@ -39,6 +39,7 @@
         <th scope="col">Category</th>
         <th scope="col">Title</th>
         <th scope="col">Content</th>
+        <th scope="col">Update</th>
         <th scope="col">Delete</th>
       </tr>
       </thead>
@@ -49,6 +50,9 @@
         <td><?php echo $row['category']; ?></td>
         <td><?php echo $row['title']; ?></td>
         <td><?php echo $row['content']; ?></td>
+        <td>
+          <a href="updatePost.php?postId=<?php echo $row['id']; ?>">Update</a>
+        </td>
         <td>
           <a href="deletePost.php?postId=<?php echo $row['id']; ?>">Delete</a>
         </td>

@@ -9,10 +9,26 @@
     header("Location: ../index.php");
   }
 
+  $loggedIn_user_id = $_SESSION["user_id"];
+
   if (isset($_GET['postId'])) {
     $postId = $_GET['postId'];
     $sqlQuery = getPostByIdQuery($postId);
     $result = mysqli_query($conn, $sqlQuery);
+    $sqlQuery1 = getCommentsByPostId($postId);
+    $result1 = mysqli_query($conn, $sqlQuery1);
+  }
+
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $comment = mysqli_real_escape_string($conn, $_POST['comment']);
+
+    $sqlQuery = getCreateCommentQuery($comment, $loggedIn_user_id, $postId);
+    
+    if (mysqli_query($conn, $sqlQuery)) {
+      header("location: showPost.php?postId=$postId");
+    } else {
+      echo "Error: " . $sqlQuery . "<br>" . mysqli_error($conn);
+    }
   }
 ?>
 
@@ -36,6 +52,26 @@
         <h2><?php echo $row['postTitle']; ?></h2>
         <p><?php echo date_format(date_create($row['postTime']),"D M d Y h:i"); ?></p>
         <p class="post-content"><?php echo $row['postContent']; ?></p>
+      </div>
+    <?php } ?>
+  </div>
+
+  <div class="m-3">
+    <h3>Comment</h3>
+    <form method="post">
+      <textarea name="comment" id="comment" placeholder="Write comment..."></textarea>
+      <br>
+      <br>
+      <button id="addComment" name="addComment" type="submit">Comment</button>
+    </form>
+  </div>
+
+  <div class="comment-container m-5">
+    <?php while ($row = mysqli_fetch_assoc($result1)) { ?>
+      <div class="post-container">
+        <h3><?php echo $row['employeesName']; ?></h3>
+        <p><?php echo date_format(date_create($row['commentTime']),"D M d Y h:i"); ?></p>
+        <p class="post-content"><?php echo $row['commentContent']; ?></p>
       </div>
     <?php } ?>
   </div>

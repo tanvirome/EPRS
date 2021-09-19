@@ -18,12 +18,12 @@
     $taskPoint = mysqli_real_escape_string($conn, $_POST['taskPoint']);
 
     if (array_key_exists('taskByAdminSubmit', $_POST)) {
-      $sqlQuery = getSubmitTaskByAdminQuery($taskId, $loggedIn_user_id);
+      $sqlQuery = getSubmitTaskByAdminQuery($taskId);
       unset($_POST['taskByAdminSubmit']);
     }
 
     if (array_key_exists('taskByOthersSubmit', $_POST)) {
-      $sqlQuery = getSubmitTaskByOthersQuery($taskId, $loggedIn_user_id);
+      $sqlQuery = getSubmitTaskByOthersQuery($taskId);
       unset($_POST['taskByOthersSubmit']);
     }
 
@@ -39,8 +39,8 @@
     mysqli_query($conn, $sqlQuery);
   }
 
-  $sqlQuery1 = getAllTasksByAdminOfUserQuery($loggedIn_user_id);
-  $sqlQuery2 = getAllTasksByOthersOfUserQuery($loggedIn_user_id);
+  $sqlQuery1 = getAllCompletedTasksOfUserByAdminQuery($loggedIn_user_id);
+  $sqlQuery2 = getAllCompletedTasksOfUserByOthersQuery($loggedIn_user_id);
   $result1 = mysqli_query($conn, $sqlQuery1);
   $result2 = mysqli_query($conn, $sqlQuery2);
   $rowCount1 = mysqli_num_rows($result1);
@@ -53,7 +53,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Employees Performance Review System | Tasks</title>
+  <title>Employees Performance Review System | My Tasks</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
 </head>
 <body>
@@ -62,7 +62,7 @@
   <div class="mt-5">
     <?php
       if (!$rowCount1 > 0 && !$rowCount2 > 0) { ?>
-        <p>No task pending.</p>
+        <p>No Data Found.</p>
     <?php } else { ?>
         <table class="table">
           <thead>
@@ -72,7 +72,7 @@
               <th scope="col">Point</th>
               <th scope="col">Assign time</th>
               <th scope="col">Deadline</th>
-              <th scope="col">Action</th>
+              <th scope="col">Status</th>
               <th scope="col">Assigned By</th>
             </tr>
           </thead>
@@ -92,11 +92,7 @@
             <td><?php echo date_format(date_create($row['time']),"D M d Y h:i"); ?></td>
             <td><?php echo date_format(date_create($row['deadline']),"D M d Y h:i"); ?></td>
             <td>
-              <form method="post">
-                <input type="hidden" name="taskId" value="<?php echo $row['id']; ?>" />
-                <input type="hidden" name="taskPoint" value="<?php echo $row['project_point']; ?>" />
-                <button type="submit" name="taskByAdminSubmit" id="taskByAdminSubmit">Submit ✅</button>
-              </form>
+              <h6>Completed</h6>
             </td>
             <td> ADMIN </td>
           </tr>
@@ -118,11 +114,7 @@
             <td><?php echo date_format(date_create($row['time']),"D M d Y h:i"); ?></td>
             <td><?php echo date_format(date_create($row['deadline']),"D M d Y h:i"); ?></td>
             <td>
-              <form method="post">
-                <input type="hidden" name="taskId" value="<?php echo $row['id']; ?>" />
-                <input type="hidden" name="taskPoint" value="<?php echo $row['points']; ?>" />
-                <button type="submit" name="taskByOthersSubmit" id="taskByOthersSubmit">Submit ✅</button>
-              </form>
+              <h6>Completed</h6>
             </td>
             <td>
               <p>
